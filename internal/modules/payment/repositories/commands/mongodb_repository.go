@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"fmt"
 	"payment-service/internal/modules/payment"
 	"payment-service/internal/modules/payment/models/entity"
 	"payment-service/internal/modules/payment/models/request"
@@ -60,7 +59,6 @@ func (c commandMongodbRepository) InsertOnePayment(ctx context.Context, payment 
 func (c commandMongodbRepository) UpdatePaymentStatus(ctx context.Context, payload request.UpdatePaymentStatusReq) <-chan wrapper.Result {
 	output := make(chan wrapper.Result)
 
-	fmt.Println(payload)
 	go func() {
 		resp := <-c.mongoDb.UpdateOne(mongodb.UpdateOne{
 			CollectionName: "payment-history",

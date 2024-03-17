@@ -4,6 +4,7 @@ package mocks
 
 import (
 	context "context"
+
 	helpers "payment-service/internal/pkg/helpers"
 
 	mock "github.com/stretchr/testify/mock"
@@ -14,17 +15,17 @@ type MongodbRepositoryQuery struct {
 	mock.Mock
 }
 
-// FindOneUserId provides a mock function with given fields: ctx, userId
-func (_m *MongodbRepositoryQuery) FindOneUserId(ctx context.Context, userId string) <-chan helpers.Result {
-	ret := _m.Called(ctx, userId)
+// FindEventById provides a mock function with given fields: ctx, id
+func (_m *MongodbRepositoryQuery) FindEventById(ctx context.Context, id string) <-chan helpers.Result {
+	ret := _m.Called(ctx, id)
 
 	if len(ret) == 0 {
-		panic("no return value specified for FindOneUserId")
+		panic("no return value specified for FindEventById")
 	}
 
 	var r0 <-chan helpers.Result
 	if rf, ok := ret.Get(0).(func(context.Context, string) <-chan helpers.Result); ok {
-		r0 = rf(ctx, userId)
+		r0 = rf(ctx, id)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(<-chan helpers.Result)

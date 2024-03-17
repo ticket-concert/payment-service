@@ -16,27 +16,35 @@ import (
 	"time"
 )
 
+var (
+	NewRequest = http.NewRequest
+	ReadAll    = io.ReadAll
+	Marshal    = json.Marshal
+)
+
 type midtransRepository struct {
-	logger log.Logger
+	baseUrl string
+	logger  log.Logger
 }
 
-func NewCommandMidtransRepository(log log.Logger) payment.MidtransRepositoryCommand {
+func NewCommandMidtransRepository(baseUrl string, log log.Logger) payment.MidtransRepositoryCommand {
 	return &midtransRepository{
-		logger: log,
+		baseUrl: baseUrl,
+		logger:  log,
 	}
 }
 
 func (m midtransRepository) TransferBank(ctx context.Context, payload request.BankTransferRequest) (*response.BankTransferResponse, error) {
 	result := &response.BankTransferResponse{}
 
-	body, err := json.Marshal(payload)
+	body, err := Marshal(payload)
 	if err != nil {
 		return nil, err
 	}
 
-	bankTransferUrl := fmt.Sprintf("%s/v2/charge", configs.GetConfig().Midtrans.BaseUrl)
+	bankTransferUrl := fmt.Sprintf("%s/v2/charge", m.baseUrl)
 
-	request, err := http.NewRequest(http.MethodPost, bankTransferUrl, bytes.NewBuffer(body))
+	request, err := NewRequest(http.MethodPost, bankTransferUrl, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +68,7 @@ func (m midtransRepository) TransferBank(ctx context.Context, payload request.Ba
 
 	defer response.Body.Close()
 
-	respBody, err := io.ReadAll(response.Body)
+	respBody, err := ReadAll(response.Body)
 	if err != nil {
 		return nil, err
 	}

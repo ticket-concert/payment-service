@@ -126,8 +126,8 @@ func setHttp(app *fiber.App, gs *graceful.GracefulShutdown) {
 
 	paymentQueryMongodbRepo := paymentRepoQuery.NewQueryMongodbRepository(mongoSlaveClient, logger)
 	paymentCommandMongodbRepo := paymentRepoCommand.NewCommandMongodbRepository(mongoMasterClient, logger)
-	midtransQueryRepo := paymentRepoQuery.NewQueryMidtransRepository(logger)
-	midtransCommandRepo := paymentRepoCommand.NewCommandMidtransRepository(logger)
+	midtransQueryRepo := paymentRepoQuery.NewQueryMidtransRepository(configs.GetConfig().Midtrans.BaseUrl, logger)
+	midtransCommandRepo := paymentRepoCommand.NewCommandMidtransRepository(configs.GetConfig().Midtrans.BaseUrl, logger)
 	paymentUsecaseCommand := paymentUsecase.NewCommandUsecase(paymentQueryMongodbRepo, paymentCommandMongodbRepo,
 		midtransQueryRepo, midtransCommandRepo, ticketQueryMongodbRepo, ticketCommandMongodbRepo, eventQueryMongodbRepo, userQueryMongodbRepo, kafkaProducer, logger, redisClient)
 	paymentUsecaseQuery := paymentUsecase.NewQueryUsecase(paymentQueryMongodbRepo, midtransQueryRepo, ticketQueryMongodbRepo, eventQueryMongodbRepo, logger, redisClient)

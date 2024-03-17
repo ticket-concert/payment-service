@@ -13,22 +13,28 @@ import (
 	"time"
 )
 
+var (
+	NewRequest = http.NewRequest
+	ReadAll    = io.ReadAll
+)
+
 type midtransRepository struct {
-	logger log.Logger
+	baseUrl string
+	logger  log.Logger
 }
 
-func NewQueryMidtransRepository(log log.Logger) payment.MidtransRepositoryQuery {
+func NewQueryMidtransRepository(baseUrl string, log log.Logger) payment.MidtransRepositoryQuery {
 	return &midtransRepository{
-		logger: log,
+		baseUrl: baseUrl,
+		logger:  log,
 	}
 }
 
 func (m midtransRepository) GetTransactionStatus(ctx context.Context, transactionId string) (*response.TransactionStatusResponse, error) {
 	result := &response.TransactionStatusResponse{}
 
-	transactionStatusUrl := fmt.Sprintf("%s/v2/%s/status", configs.GetConfig().Midtrans.BaseUrl, transactionId)
-
-	request, err := http.NewRequest(http.MethodGet, transactionStatusUrl, nil)
+	transactionStatusUrl := fmt.Sprintf("%s/v2/%s/status", m.baseUrl, transactionId)
+	request, err := NewRequest(http.MethodGet, transactionStatusUrl, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -46,15 +52,13 @@ func (m midtransRepository) GetTransactionStatus(ctx context.Context, transactio
 		return nil, err
 	}
 
-	fmt.Println(response)
-
 	if response.StatusCode > 300 {
 		return nil, err
 	}
 
 	defer response.Body.Close()
 
-	respBody, err := io.ReadAll(response.Body)
+	respBody, err := ReadAll(response.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +66,6 @@ func (m midtransRepository) GetTransactionStatus(ctx context.Context, transactio
 	fmt.Println(string(respBody))
 
 	errBody := json.Unmarshal(respBody, &result)
-	fmt.Println(errBody)
 	if errBody != nil {
 		return nil, errBody
 	}

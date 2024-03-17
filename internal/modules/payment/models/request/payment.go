@@ -4,7 +4,7 @@ type PaymentReq struct {
 	TicketNumber string `json:"ticketNumber" validate:"required"`
 	UserId       string `json:"userId" validate:"required"`
 	EventId      string `json:"eventId" validate:"required"`
-	PaymentType  string `json:"paymentType" bson:"paymentType"`
+	PaymentType  string `json:"paymentType" validate:"required"`
 }
 
 type PaymentStatusReq struct {
