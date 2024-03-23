@@ -2,12 +2,14 @@ package log
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"time"
 
 	"go.elastic.co/apm"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 var logger LoggerConf
@@ -22,7 +24,7 @@ type Logger interface {
 	Error(ctx context.Context, msg string, meta interface{})
 }
 
-func SetupLogger() *LoggerConf {
+func SetupLogger(serviceName string) *LoggerConf {
 	lg := zap.NewProductionConfig()
 	lg.DisableStacktrace = false
 	lg.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
@@ -47,9 +49,21 @@ func SetupLogger() *LoggerConf {
 	}
 	lg.EncoderConfig.EncodeName = zapcore.FullNameEncoder
 
-	core := zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), zap.DebugLevel)
+	fileEncoder := zapcore.NewJSONEncoder(lg.EncoderConfig)
+	fileName := fmt.Sprintf("./logs/%s.log", time.Now().Format("2006-01-02"))
+	writer := zapcore.AddSync(&lumberjack.Logger{
+		Filename:   fileName,
+		MaxSize:    10, // megabytes
+		MaxBackups: 3,
+		MaxAge:     14, // days
+	})
+	core := zapcore.NewTee(
+		zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), zap.DebugLevel),
+		zapcore.NewCore(fileEncoder, writer, zap.DebugLevel),
+	)
 
 	zapLogger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
+	zapLogger = zapLogger.With(ZapString("serviceName", serviceName))
 	return &LoggerConf{
 		dep: zapLogger,
 	}
