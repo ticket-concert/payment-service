@@ -29,6 +29,7 @@ type Config struct {
 	SecretHashPass    string           `envconfig:"secret_hash_pass"`
 	IdHash            string           `envconfig:"id_hash"`
 	Midtrans          MidtransConfig   `envconfig:"midtrans"`
+	AppsLimiter       bool             `envconfig:"apps_limiter"`
 }
 
 type HttpServerConfig struct {

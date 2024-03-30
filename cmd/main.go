@@ -25,6 +25,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -71,6 +72,13 @@ func main() {
 	app.Use(recover.New())
 	app.Use(cors.New())
 	app.Use(pprof.New())
+	if configs.GetConfig().AppsLimiter {
+		app.Use(limiter.New(limiter.Config{
+			Max:               100,
+			Expiration:        1 * time.Minute,
+			LimiterMiddleware: limiter.SlidingWindow{},
+		}))
+	}
 	app.Use(logger.New(logger.Config{
 		Format: "[${time}] ${status} - ${latency} ${method} ${path}\n",
 		// Format:       `${time} {"router_activity" : [${status},"${latency}","${method}","${path}"], "query_param":${queryParams}, "body_param":${body}}` + "\n",
