@@ -1,93 +1,371 @@
-# payment-service
+# Payment Service
+[![forthebadge](https://forthebadge.com/images/badges/made-with-go.svg)](https://forthebadge.com) 
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ticket-concert_payment-service&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ticket-concert_payment-service)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ticket-concert_payment-service&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ticket-concert_payment-service)
 
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/ticket-concert/payment-service.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.com/ticket-concert/payment-service/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
 
 ## Name
-Choose a self-explaining name for your project.
+payment-service built with :heart:
 
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Payment Service is service that used to create payment, view payment history, and callback success payment
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+1. Ensure, already install golang 1.20 or up
+2. Create file .env
+```bash
+    cp .env.sample .env
+```
+3. Fill out the env configuration
+```bash
+#General
+SERVICE_NAME=service_payment
+SERVICE_VERSION=1.0.0
+SERVICE_PORT=9005
+SERVICE_ENV=development
+USERNAME_BASIC_AUTH=username
+PASSWORD_BASIC_AUTH=password
+SHUTDOWN_DELAY=
+SECRET_HASH_PASS=
+ID_HASH=
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+#Mongodb
+MONGO_MASTER_DATABASE_URL=mongodb://admin:password@localhost:27020/admin
+MONGO_SLAVE_DATABASE_URL=mongodb://admin:password@localhost:27020/admin
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+#Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_DB=0
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+#APM
+APM_URL=
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+#Kafka
+KAFKA_URL=localhost:29092
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+#JWT
+JWT_PRIVATE_KEY='your jwt'
+JWT_PUBLIC_KEY='your jwt'
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+JWT_REFRESH_PRIVATE_KEY='your jwt'
+JWT_REFRESH_PUBLIC_KEY='your jwt'
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+APPS_LIMITER=
+```
+4. Install dependencies:
+```bash
+make install
+```
+5. Run in development:
+```bash
+make run
+```
 
-## License
-For open source projects, say how it is licensed.
+## Test
+1. Run unit test
+```bash
+make unit-test
+```
+2. Show local coverage (in html)
+```bash
+make coverage
+```
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## High Level Design Architecture
+![picture](/assets/HLD.jpg)
+
+## Low Level Design Architecture
+![picture](/assets/LLD.jpg)
+
+## ERD
+```mermaid
+erDiagram
+    users {
+        string _id
+        string userId PK
+        string email
+        string address
+        json country
+        string country_continentId
+        string country_continentName
+        string country_latitude
+        string country_longitude
+        int country_id
+        string country_code
+        string country_Indonesia
+        string country_fullName
+        string createdAt
+        string fullName
+        string loginAt
+        string nik
+        string password
+        string role
+        string rtrw
+        string status
+        json subdistrict
+        string subdistrict_districtId
+        string subdistrict_districtName
+        string subdistrict_cityId
+        string subdistrict_cityName
+        string subdistrict_provinceId
+        string subdistrict_provinceName
+        string subdistrict_id
+        string subdistrict_name
+        string updatedAt
+    }
+
+    users-temp {
+        string _id
+        string userId PK
+        string email
+        string address
+        json country
+        string country_continentId
+        string country_continentName
+        string country_latitude
+        string country_longitude
+        int country_id
+        string country_code
+        string country_Indonesia
+        string country_fullName
+        string createdAt
+        string fullName
+        string loginAt
+        string nik
+        string password
+        string role
+        string rtrw
+        string status
+        json subdistrict
+        string subdistrict_districtId
+        string subdistrict_districtName
+        string subdistrict_cityId
+        string subdistrict_cityName
+        string subdistrict_provinceId
+        string subdistrict_provinceName
+        string subdistrict_id
+        string subdistrict_name
+        string updatedAt
+    }
+
+    event {
+        string _id
+        string eventId PK
+        string name
+        string dateTime
+        string continentName
+        string continentCode
+        json country
+        string country_name
+        string country_code
+        string country_city
+        string country_place
+        string description
+        string tag
+        string eventUrl
+        string ticketIds
+        string createdAt
+        string updatedAt
+        string createdBy
+        string updatedBy
+    }
+
+    ticket-detail {
+        string _id
+        string ticketId PK
+        string eventId
+        string ticketType
+        int ticketPrice
+        int totalQuota
+        int totalRemaining
+        string continentName
+        string continentCode
+        json country
+        string country_name
+        string country_code
+        string country_city
+        string country_place
+        string tag
+        string createdAt
+        string updatedAt
+    }
+
+    bank-ticket {
+        string _id
+        string ticketNumber PK
+        int seatNumber
+        bool isUsed
+        string userId
+        string queueId
+        string ticketId
+        string eventId
+        string countryCode
+        int price
+        string ticketType
+        string paymentStatus
+        string createdAt
+        string updatedAt
+    }
+
+    order {
+        string _id
+        string orderId PK
+        string paymentId
+        string mobileNumber
+        string vaNumber
+        string bank
+        string email
+        string fullName
+        string ticketNumber
+        string ticketType
+        int seatNumber
+        string eventName
+        json country
+        string country_name
+        string country_code
+        string country_city
+        string country_place
+        string dateTime
+        string description
+        string tag
+        int amount
+        string paymentStatus
+        string orderTime
+        string userId
+        string queueId
+        string ticketId
+        string eventId
+        string createdAt
+        string updatedAt
+    }
+
+    payment-history {
+        string _id
+        string paymentId PK
+        string userId
+        json ticket
+        string ticket_ticketNumber
+        string ticket_eventId
+        string ticket_ticketType
+        int ticket_seatNumber
+        string ticket_countryCode
+        string ticket_ticketId
+        json payment
+        string payment_transactionId
+        string payment_statusCode
+        string payment_grossAmount
+        string payment_paymentType
+        string payment_transactionStatus
+        string payment_fraudStatus
+        string payment_statusMessage
+        string payment_merchantId
+        string payment_permataVaNumber
+        json_array payment_vaNumbers
+        string payment_vaNumbers_bank
+        string payment_vaNumbers_vaNumber
+        json_array payment_paymentAmounts
+        string payment_transactionTime
+        bool isValidPayment
+        string expiryTime
+        string createdAt
+        string updatedAt
+    }
+
+    queue-room {
+        string _id
+        string queueId PK
+        string userId
+        string eventId
+        int queueNumber
+        string countryCode
+        string createdAt
+        string updatedAt
+    }
+
+    subdistrict {
+        string _id
+        string id PK
+        string name
+        string cityId
+        string cityName
+        string districtId
+        string districtName
+        string provinceId
+        string provinceName
+    }
+
+    city {
+        string _id
+        string id PK
+        string name
+        string provinceId
+        string provinceName
+    }
+
+    continent {
+        string _id
+        string code PK
+        string name
+    }
+
+    country {
+        string _id
+        int id PK
+        string code
+        string name
+        string iso3
+        int number
+        string continentCode
+        string continentName
+        int displayOrder
+        string fullName
+    }
+
+    district {
+        string _id
+        string id PK
+        string name
+        string cityId
+        string cityName
+        string provinceId
+        string provinceName
+    }
+
+    province {
+        string _id
+        string id PK
+        string name
+    }
+
+    country ||--o{ province: contains
+    province ||--|{ city: contains
+    city ||--|{ district: contains
+    district ||--|{ subdistrict: contains
+    event ||--|{ ticket-detail: contains
+    ticket-detail ||--|{ bank-ticket: contains
+    users ||--|{ bank-ticket: uses
+    users ||--o{ order: uses
+    users ||--o{ payment-history: uses
+    users ||--o{ queue-room: uses
+    users ||--|| country: uses
+    users-temp ||--|| country: uses
+    continent ||--|{ country: contains
+```
+
+## Data & Tool Preparation
+[Click Me](https://github.com/ticket-concert/tools)
+
+## Authors 
+* **Alif Septian Nurdianto** - [Github](https://github.com/alifsn)
+
+## Development Tools
+* [Fiber](https://gofiber.io/) Rest Framework
+* [Zap](https://github.com/uber-go/zap) Log Management
+* [Kafka](https://pkg.go.dev/gopkg.in/confluentinc/confluent-kafka-go.v1@v1.8.2) Event Management
+* [Mockery](https://github.com/vektra/mockery) Mock Generator
+* [Go mod](https://go.dev/ref/mod) Depedency Management
+* [Docker](https://www.docker.com/) Container Management
